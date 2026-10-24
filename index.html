@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#171a1b">
+  <meta name="description" content="从三维夜巷进入电表箱内部，追踪空中、箱体与入户线路，并阅读《头顶的网》二维交互叙事。">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23171d1d'/%3E%3Cpath d='M8 25V9l8-4 8 4v16M13 25V12h6v13' fill='none' stroke='%23e8d7ad' stroke-width='2'/%3E%3C/svg%3E">
+  <title>夜巷 · 20:14</title>
+  <script type="module" crossorigin src="./assets/index-D6TdCDpj.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-BhYIyrhT.css">
+</head>
+<body>
+  <main id="experience" aria-label="旧城夜巷三维场景">
+    <div id="poster" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
+    <svg class="intro-thread" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M-80 170 C230 40 350 330 650 155 S1080 40 1520 245"/>
+      <path d="M-40 195 C250 75 385 355 675 180 S1100 78 1490 270"/>
+    </svg>
+    <div class="frame-marks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="scene-reticle" aria-hidden="true"><i></i><b></b></div>
+    <header class="topbar interface">
+      <div class="identity">
+        <p class="eyebrow">THE NET ABOVE US · FIELD ARCHIVE</p>
+        <div class="title-lockup"><h1>夜巷</h1><span>20:14</span></div>
+        <p class="identity-sub">武汉民主路社区 / 空间与线缆研究</p>
+      </div>
+      <div class="header-register" aria-hidden="true">
+        <span>ARCHIVE No. 012</span><i></i><small>WUHAN · 2026</small>
+        <b class="live"><i></i> LIVE SCENE</b>
+      </div>
+      <div class="top-actions">
+        <button id="analysisButton" class="text-button" type="button" aria-expanded="false" aria-controls="analysisPanel">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17 9 12l3 3 7-9M4 20h16"/></svg>
+          <span class="nav-index">01</span><span class="nav-copy">线缆档案<small>CABLE LEDGER</small></span>
+        </button>
+        <button id="narrativeButton" class="text-button" type="button" aria-haspopup="dialog">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5zM9 8h6M9 12h6M9 16h4"/></svg>
+          <span class="nav-index">02</span><span class="nav-copy">二维叙事<small>2D NARRATIVE</small></span>
+        </button>
+        <button id="referenceButton" class="text-button" type="button" aria-expanded="false" aria-controls="referencePanel">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM4 15l4-4 4 4 3-3 5 5M16 9h.01"/></svg>
+          <span class="nav-index">03</span><span class="nav-copy">对照原片<small>PHOTO EVIDENCE</small></span>
+        </button>
+      </div>
+    </header>
+
+    <div class="side-note interface" aria-hidden="true"><span>FIELD STUDY / 2026</span><i></i>旧城里巷 · 照片重建</div>
+
+    <footer class="bottom interface">
+      <div class="view-copy" aria-live="polite">
+        <p id="viewNumber">CAMERA 01 / 03</p>
+        <div class="view-title-row"><span id="viewGhost" aria-hidden="true">01</span><h2 id="viewTitle">巷口</h2></div>
+        <p id="viewDescription">湿路面、花店招牌与旧瓦屋顶</p>
+      </div>
+      <nav class="view-switcher" aria-label="选择观看机位">
+        <button class="view-button active" type="button" data-view="0" aria-pressed="true"><span>01</span>巷口</button>
+        <button class="view-button" type="button" data-view="1" aria-pressed="false"><span>02</span>转角</button>
+        <button class="view-button" type="button" data-view="2" aria-pressed="false"><span>03</span>深处</button>
+        <button id="boxModeButton" class="view-button box-entry" type="button" aria-pressed="false"><span>04</span>箱体</button>
+      </nav>
+      <div class="controls-hint">
+        <div class="coordinate-readout" aria-hidden="true"><span>SCREEN X <b id="pointerX">0000</b></span><span>SCREEN Y <b id="pointerY">0000</b></span></div>
+        <button id="resetButton" type="button" title="重置当前视角（R）">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11a8 8 0 1 1 2 6M4 5v6h6"/></svg>
+          重置视角
+        </button>
+        <p>拖动小范围环视 · 按 1—3 切换</p>
+      </div>
+    </footer>
+
+    <aside id="referencePanel" class="reference-panel interface" aria-hidden="true" aria-label="现场照片与证据">
+      <div class="panel-heading">
+        <div><p>PHOTO EVIDENCE</p><h2>现场证据</h2></div>
+        <button id="closeReference" class="icon-button" type="button" aria-label="关闭参考照片">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <p class="panel-intro">最初三张夜景决定主构图；八张补拍用于校准细节。点击照片可查看局部、证据边界与关联线路。</p>
+      <div class="photo-register"><span id="photoCount">11 张现场照片</span><small>3 主片＋4 日拍＋4 夜拍</small></div>
+      <div id="photoFilters" class="photo-filters" aria-label="筛选现场照片">
+        <button type="button" data-filter="all" class="active" aria-pressed="true">全部</button>
+        <button type="button" data-filter="main" aria-pressed="false">主机位</button>
+        <button type="button" data-filter="day" aria-pressed="false">白天</button>
+        <button type="button" data-filter="night" aria-pressed="false">夜间</button>
+      </div>
+      <div id="photoGrid" class="photo-grid"></div>
+    </aside>
+
+    <aside id="inspectionPanel" class="inspection-panel interface" aria-hidden="true" aria-label="箱体线路观察控制">
+      <div class="inspection-heading">
+        <p>OBSERVATION · E-3</p>
+        <span>结构示意 / 非施工图</span>
+      </div>
+      <h2>线路从空中进入日常</h2>
+      <p class="inspection-intro">开箱查看节点关系。颜色用于区分路径，不代表现场线色或权属鉴定。</p>
+      <div class="inspection-actions">
+        <button id="doorToggle" type="button" aria-pressed="true">合上箱门</button>
+        <button id="explodeToggle" type="button" aria-pressed="false">分层展开</button>
+      </div>
+      <div class="circuit-list" aria-label="选择要追踪的线路">
+        <button class="circuit-button active" type="button" data-circuit=""><i class="all"></i><span>全部线路</span><small>完整关系</small></button>
+        <button class="circuit-button" type="button" data-circuit="power"><i class="power"></i><span>电力进线</span><small>空中 → 箱体</small></button>
+        <button class="circuit-button" type="button" data-circuit="meter"><i class="meter"></i><span>电表回路</span><small>计量 → 断路器</small></button>
+        <button class="circuit-button" type="button" data-circuit="home"><i class="home"></i><span>入户线路</span><small>箱体 → 住户</small></button>
+      </div>
+      <p id="circuitNote" class="circuit-note">现场证据支持“空中—杆—墙面—入户”的空间链条；箱内布局是为解释关系制作的结构示意。</p>
+    </aside>
+
+    <aside id="analysisPanel" class="analysis-panel interface" aria-hidden="true" aria-label="线缆数据档案与联动视图">
+      <div class="analysis-heading">
+        <div><p>CABLE LEDGER · 12</p><h2>一根线，一层时间</h2></div>
+        <button id="closeAnalysis" class="icon-button" type="button" aria-label="关闭线缆档案">×</button>
+      </div>
+      <p class="analysis-caveat">约 12 根来自现场计数；逐根年代、权属与路径按证据等级区分，不是资产台账。</p>
+      <div class="encoding-legend" aria-label="视觉编码图例">
+        <span><i style="--c:#f0b429"></i>电力</span><span><i style="--c:#38c2f1"></i>通信</span><span><i style="--c:#e8e6e3"></i>照明</span><span><i style="--c:#ff6b6b"></i>监控</span><span><i style="--c:#9aa4b2"></i>私拉</span>
+        <small>实线＝现场支撑　虚线＝推测连接　高亮＝当前选择<br>淡线＝尚未出现／部分印证／被过滤</small>
+      </div>
+      <section class="timeline-block" aria-label="年代对照">
+        <div class="section-label"><span>01 · 时间分层</span><output id="yearOutput">2026</output></div>
+        <div class="timeline-track"><input id="yearSlider" type="range" min="1980" max="2026" value="2026" step="1" aria-label="选择年代"><i id="cableYearMarker" title="选中线路的年代"></i></div>
+        <div class="timeline-years" aria-hidden="true"><span>1980</span><span>2000</span><span>2026</span></div>
+        <div class="year-presets"><button data-year="1984">1984</button><button data-year="2004">2004</button><button data-year="2026" class="active">现在</button><button data-year="future">入地示意</button></div>
+      </section>
+      <section class="overview-block">
+        <div class="section-label"><span>02 · 当前构成</span><b id="visibleCount">12 / 12 根</b></div>
+        <div id="functionBar" class="function-bar" aria-label="当前年代功能构成"></div>
+        <div class="select-row"><label for="functionFilter">功能筛选</label><select id="functionFilter"><option value="">全部功能</option><option>电力</option><option>通信</option><option>照明</option><option>监控</option><option>私拉</option></select></div>
+        <div class="select-row"><label for="cableSelect">选中线路</label><select id="cableSelect"><option value="">不选中 · 总览</option></select></div>
+      </section>
+      <section class="relation-block">
+        <div class="section-label"><span>03 · 关联节点</span><small>随线路联动</small></div>
+        <svg id="miniGraph" viewBox="0 0 320 132" aria-label="线缆关联节点图">
+          <g class="edges"><path d="M35 66H118M202 66H285M160 24V8M160 108v16M118 66 70 20M202 66l48 42"/></g>
+          <g class="node" data-node="pole"><circle cx="160" cy="66" r="42"/><text x="160" y="70">电线杆</text></g>
+          <g class="node" data-node="meter"><circle cx="35" cy="66" r="24"/><text x="35" y="70">电表箱</text></g>
+          <g class="node" data-node="home"><circle cx="285" cy="66" r="24"/><text x="285" y="70">住户</text></g>
+          <g class="node" data-node="operator"><circle cx="70" cy="20" r="20"/><text x="70" y="24">运营商</text></g>
+          <g class="node" data-node="light"><circle cx="160" cy="12" r="17"/><text x="160" y="16">路灯</text></g>
+          <g class="node" data-node="camera"><circle cx="250" cy="112" r="20"/><text x="250" y="116">监控</text></g>
+        </svg>
+      </section>
+      <section class="evidence-block">
+        <div class="section-label"><span>04 · 证据与不确定性</span><b id="evidenceBadge">总览</b></div>
+        <h3 id="evidenceTitle">从总览选择一根线</h3>
+        <p id="evidenceText">可点击三维中的彩色线路，或从上方档案列表选择。时间、关系节点和证据说明会同时更新。</p>
+        <dl class="evidence-meta"><div><dt>路径</dt><dd id="evidencePath">空中 → 杆 → 墙面 → 入户</dd></div><div><dt>来源</dt><dd id="evidenceSource">现场照片、计数、访谈与政策文本</dd></div></dl>
+        <button id="evidencePhoto" class="evidence-photo" type="button" hidden>
+          <img id="evidencePhotoThumb" alt=""><span><small>LINKED FIELD PHOTO</small><b id="evidencePhotoLabel">查看现场证据</b><i>原片／局部对照 →</i></span>
+        </button>
+        <p class="evidence-disclaimer">关联表示该照片支持这类空间关系，不代表已辨认出现场单根线缆。</p>
+        <button id="methodButton" class="method-link" type="button">查看数据与编码方法 →</button>
+      </section>
+    </aside>
+
+    <div id="loading" role="status" aria-live="polite">
+      <div class="loading-mark"><span></span><span></span><span></span></div>
+      <p>正在点亮夜巷</p>
+      <small>构筑墙面、线缆与湿润的反光</small>
+    </div>
+    <div id="errorMessage" hidden>当前浏览器未能启动三维场景，请开启硬件加速后重试。</div>
+  </main>
+
+  <section id="methodOverlay" class="method-overlay" role="dialog" aria-modal="true" aria-labelledby="methodTitle" hidden>
+    <article class="method-document">
+      <header><div><p>METHODOLOGY · VIS5027</p><h2 id="methodTitle">数据、编码与推测边界</h2></div><button id="closeMethod" class="icon-button" type="button" aria-label="关闭方法说明">×</button></header>
+      <div class="method-grid">
+        <section><span>01</span><h3>数据怎样得到</h3><p>约 12 根来自现场照片放大后的逐根计数，是估算值；离地约 3 m 来自调研笔记。三张夜间主片决定构图，2026 年 9 月 29 日的四张日拍与 10 月 14 日的四张夜拍补充墙面走线、外置楼梯、线束层次和续巷灯光。</p></section>
+        <section><span>02</span><h3>视觉编码</h3><p>颜色只区分功能，不复制现场线色；实线表示现场关系有支撑，虚线表示推测连接；降低透明度表示该年代尚未出现、当前被过滤或关系仅获部分印证。高亮仅表示用户选择。</p></section>
+        <section><span>03</span><h3>为什么不能直接认线</h3><p>电力线与通信线外观可能相近。每根线的敷设年份、运营商和居民私拉属性，需要线缆喷码、杆体标识、权属核对或访谈才能确认。</p></section>
+        <section><span>04</span><h3>三维与入地情景</h3><p>箱内布局是解释空间关系的结构示意，不是施工图。入地对照依据政策方向制作，只表达一种未来情景，不表示民主路社区已有明确施工计划。</p></section>
+      </div>
+      <footer><b>主要材料</b><p>本人现场照片与计数、W 婆婆访谈、小组田野笔记、主机位 P01—P03、白天补拍 D01—D04、夜间补拍 N01—N04；《武汉市人民政府公报》2022 年第 8 期；《武汉市老旧小区改造技术导则》2023。拍摄日期不等于敷设年代；逐根年份仅用于时间分层演示，不视为实测年份。</p></footer>
+    </article>
+  </section>
+
+  <section id="photoOverlay" class="photo-overlay" role="dialog" aria-modal="true" aria-labelledby="photoTitle" hidden>
+    <div class="photo-stage">
+      <header class="photo-stage-bar">
+        <p id="photoRegister">P01 / FULL FRAME</p>
+        <div class="photo-view-modes" aria-label="照片显示范围">
+          <button id="photoFullButton" type="button" class="active" aria-pressed="true">完整原片</button>
+          <button id="photoCropButton" type="button" aria-pressed="false">证据局部</button>
+        </div>
+        <button id="closePhoto" class="photo-close" type="button" aria-label="关闭照片">返回档案 <b>×</b></button>
+      </header>
+      <div class="photo-image-wrap"><img id="photoFull" alt=""></div>
+      <button id="photoPrev" class="photo-step previous" type="button" aria-label="上一张照片">← <span>PREV</span></button>
+      <button id="photoNext" class="photo-step next" type="button" aria-label="下一张照片"><span>NEXT</span> →</button>
+      <p class="photo-stage-hint">← → 切换照片　·　关联编号用于分析，不等同于现场认线</p>
+    </div>
+    <aside class="photo-notes">
+      <p id="photoDate" class="photo-date">2026.10.14</p>
+      <h2 id="photoTitle">巷口 · 主构图</h2>
+      <p id="photoSummary" class="photo-summary"></p>
+      <section><span>01 / VISIBLE</span><h3>照片能证明什么</h3><p id="photoSupports"></p></section>
+      <section><span>02 / UNKNOWN</span><h3>仍不能确认什么</h3><p id="photoUnknown"></p></section>
+      <section class="photo-related"><span>03 / LINKED CABLES</span><h3>关联分析线路</h3><div id="photoCables"></div><small>点击编号进入三维档案；关联不代表单根识别。</small></section>
+      <button id="locatePhoto" class="locate-photo" type="button">回到对应三维机位 <span>↗</span></button>
+    </aside>
+  </section>
+
+  <section id="narrativeOverlay" class="narrative-overlay" role="dialog" aria-modal="true" aria-label="头顶的网二维叙事" hidden>
+    <header class="narrative-bar">
+      <div><span>2D ARCHIVE</span><strong>头顶的网 · The Net Above Us</strong></div>
+      <button id="closeNarrative" type="button" aria-label="关闭二维叙事">返回三维现场 <b>×</b></button>
+    </header>
+    <iframe id="narrativeFrame" title="头顶的网：电线电缆二维交互叙事" loading="lazy"></iframe>
+  </section>
+</body>
+</html>

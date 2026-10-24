@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>头顶的网 · The Net Above Us</title>
+<style>
+  :root{
+    --sky1:#0b0f16; --sky2:#151d2b;
+    --ink:#e8e6e3; --dim:#8a93a3;
+    --blue:#38c2f1; --amber:#f0b429; --red:#ff6b6b; --grey:#9aa4b2;
+    --ev:#7fd08c; --guess:#e0b34d;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--sky1);color:var(--ink);
+    font-family:"Songti SC","Noto Serif SC",Georgia,serif;}
+  ::selection{background:var(--blue);color:#0b0f16;}
+  section{position:relative;}
+  svg{display:block;}
+  button{font-family:inherit;}
+
+  /* ================= 篇章一：抬头看 ================= */
+  #p1{height:100vh;overflow:hidden;}
+  #p1 svg.wide{width:100%;height:100%;}
+  #year1{position:absolute;top:6vh;left:6vw;font-family:ui-monospace,Menlo,monospace;
+    font-size:clamp(28px,4vw,44px);letter-spacing:.08em;opacity:0;transition:opacity .8s;z-index:3;}
+  #year1 small{display:block;font-size:12px;letter-spacing:.3em;color:var(--dim);margin-top:6px;}
+  .line{position:absolute;left:50%;top:26%;transform:translate(-50%,-50%);
+    width:90vw;text-align:center;font-size:clamp(22px,3.2vw,38px);
+    line-height:1.7;opacity:0;transition:opacity 1s;pointer-events:none;z-index:3;white-space:nowrap;}
+  .line small{display:block;font-size:.45em;color:var(--dim);letter-spacing:.15em;margin-top:14px;}
+  #intro1{position:absolute;inset:0;background:rgba(6,9,14,.72);z-index:10;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:3vh;text-align:center;transition:opacity 1.2s;}
+  #intro1 h1{font-size:clamp(34px,6vw,64px);letter-spacing:.18em;font-weight:600;}
+  #intro1 p{color:var(--dim);font-size:clamp(13px,1.4vw,16px);letter-spacing:.28em;}
+  #lookUp{margin-top:2vh;background:none;border:1px solid var(--ink);color:var(--ink);
+    font-size:clamp(16px,1.8vw,20px);letter-spacing:.4em;text-indent:.4em;
+    padding:16px 42px;cursor:pointer;transition:all .4s;}
+  #lookUp:hover{background:var(--ink);color:#0b0f16;}
+  #intro1 .hint{position:absolute;bottom:5vh;font-size:12px;letter-spacing:.2em;color:var(--dim);}
+  #guess1{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);
+    width:min(640px,86vw);text-align:center;opacity:0;transition:opacity 1s;pointer-events:none;z-index:3;}
+  #guess1.on{pointer-events:auto;}
+  #guess1 p{font-size:clamp(18px,2.2vw,26px);margin-bottom:5vh;white-space:nowrap;}
+  #track1{position:relative;height:2px;background:#3a4356;margin:0 8%;}
+  #bubble1{position:absolute;top:-64px;transform:translateX(-50%);
+    font-family:ui-monospace,Menlo,monospace;font-size:26px;transition:left .05s linear;white-space:nowrap;}
+  #bubble1::after{content:"";position:absolute;left:50%;top:38px;transform:translateX(-50%);
+    border:6px solid transparent;border-top-color:var(--ink);}
+  #slider1{-webkit-appearance:none;appearance:none;width:100%;height:40px;background:transparent;
+    position:relative;top:-20px;cursor:pointer;}
+  #slider1::-webkit-slider-runnable-track{height:2px;background:transparent;}
+  #slider1::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+    background:var(--blue);border:3px solid #0b0f16;box-shadow:0 0 0 1px var(--blue);margin-top:-10px;}
+  #slider1::-moz-range-track{height:2px;background:transparent;}
+  #slider1::-moz-range-thumb{width:16px;height:16px;border-radius:50%;
+    background:var(--blue);border:3px solid #0b0f16;box-shadow:0 0 0 1px var(--blue);}
+  .tick1{position:absolute;top:14px;transform:translateX(-50%);font-size:12px;color:var(--dim);
+    font-family:ui-monospace,Menlo,monospace;}
+  #submit1{margin-top:4vh;background:none;border:1px solid var(--blue);color:var(--blue);
+    font-size:15px;letter-spacing:.35em;text-indent:.35em;padding:12px 36px;cursor:pointer;transition:all .4s;}
+  #submit1:hover{background:var(--blue);color:#0b0f16;}
+  #skip1{position:absolute;right:5vw;bottom:5vh;font-size:12px;letter-spacing:.25em;color:var(--dim);
+    cursor:pointer;opacity:0;transition:opacity .8s;z-index:5;}
+  #skip1:hover{color:var(--ink);}
+  #legend1{position:absolute;left:6vw;bottom:6vh;font-size:12px;letter-spacing:.15em;
+    color:var(--dim);opacity:0;transition:opacity 1s;line-height:2;z-index:3;}
+  #legend1 i{display:inline-block;width:22px;height:0;vertical-align:middle;margin-right:10px;}
+  #end1{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);text-align:center;
+    opacity:0;transition:opacity 1s;pointer-events:none;width:90vw;z-index:3;}
+  #end1.on{pointer-events:auto;}
+  #end1 p{font-size:clamp(18px,2.4vw,28px);line-height:2;white-space:nowrap;}
+  #end1 small{display:block;color:var(--dim);font-size:13px;letter-spacing:.2em;margin-top:3vh;}
+  #end1 button{margin-top:4vh;background:none;border:1px solid var(--ink);color:var(--ink);
+    font-size:14px;letter-spacing:.3em;text-indent:.3em;padding:12px 32px;cursor:pointer;transition:all .4s;}
+  #end1 button:hover{background:var(--ink);color:#0b0f16;}
+
+  /* ================= 篇章二：滚动时间线 ================= */
+  #scrollTrack{height:800vh;}
+  #stage2{position:sticky;top:0;height:100vh;overflow:hidden;}
+  #stage2 svg.wide{width:100%;height:100%;}
+  #year2{position:absolute;top:5vh;left:5vw;z-index:3;pointer-events:none;
+    font-family:ui-monospace,Menlo,monospace;font-size:clamp(26px,3.6vw,40px);
+    letter-spacing:.08em;opacity:0;transition:opacity .6s;}
+  #year2 small{display:block;font-size:11px;letter-spacing:.3em;color:var(--dim);margin-top:6px;}
+  #card2{position:absolute;right:5vw;top:50%;transform:translateY(-50%);
+    width:min(420px,84vw);z-index:3;pointer-events:none;opacity:0;transition:opacity .7s;}
+  #card2 h2{font-size:clamp(20px,2.4vw,30px);letter-spacing:.1em;margin:1vh 0 2vh;line-height:1.5;}
+  #card2 .body{font-size:clamp(13px,1.3vw,15px);line-height:2;color:#c9cdd6;}
+  #card2 .tag{display:inline-block;margin-top:2.4vh;font-size:11px;letter-spacing:.2em;
+    font-family:ui-monospace,Menlo,monospace;padding:5px 12px;border:1px solid;}
+  .tag.ev{color:var(--ev);border-color:var(--ev);}
+  .tag.guess{color:var(--guess);border-color:var(--guess);}
+  #card2 .idx{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.35em;color:var(--dim);}
+  #legend2{position:absolute;left:5vw;bottom:5vh;z-index:3;font-size:12px;letter-spacing:.15em;
+    color:var(--dim);line-height:2;opacity:0;transition:opacity .8s;pointer-events:none;}
+  #legend2 i{display:inline-block;width:22px;height:0;vertical-align:middle;margin-right:10px;}
+  #dots2{position:absolute;left:5vw;top:50%;transform:translateY(-50%);z-index:3;
+    display:flex;flex-direction:column;gap:14px;opacity:0;transition:opacity .8s;pointer-events:none;}
+  #dots2 span{width:6px;height:6px;border-radius:50%;background:#2c3546;transition:all .4s;}
+  #dots2 span.on{background:var(--blue);transform:scale(1.5);}
+  #cue2{position:absolute;left:50%;bottom:4vh;transform:translateX(-50%);z-index:3;
+    font-size:12px;letter-spacing:.3em;color:var(--dim);opacity:0;transition:opacity .8s;pointer-events:none;
+    animation:bob 2.2s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,8px)}}
+
+  /* 悬停提示（全站共用） */
+  #tip{position:fixed;pointer-events:none;background:rgba(10,14,22,.92);
+    border:1px solid #2c3546;padding:8px 12px;font-size:12px;line-height:1.8;
+    letter-spacing:.08em;opacity:0;transition:opacity .2s;z-index:99;
+    font-family:ui-monospace,Menlo,monospace;white-space:nowrap;}
+  #tip b{color:var(--blue);font-weight:400;}
+
+  /* ================= 揭底 + 前后对照 ================= */
+  #reveal{background:var(--sky1);padding:16vh 6vw 12vh;text-align:center;}
+  #reveal .idx{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.35em;color:var(--dim);margin-bottom:3vh;}
+  #reveal h2{font-size:clamp(24px,3.4vw,42px);letter-spacing:.12em;margin-bottom:7vh;}
+  #numbers{display:flex;justify-content:center;align-items:baseline;gap:6vw;flex-wrap:wrap;}
+  .num small{display:block;font-size:13px;letter-spacing:.25em;color:var(--dim);margin-bottom:1.6vh;}
+  .num b{font-family:ui-monospace,Menlo,monospace;font-weight:400;font-size:clamp(48px,8vw,96px);}
+  .num b em{font-style:normal;font-size:.35em;}
+  #guessNum b{color:var(--blue);}
+  #verdict{margin-top:5vh;font-size:clamp(14px,1.5vw,17px);line-height:2.2;color:#c9cdd6;}
+  #compare{margin:14vh auto 0;max-width:960px;}
+  #compare h3{font-size:clamp(18px,2.2vw,26px);letter-spacing:.12em;margin-bottom:1.6vh;}
+  #compare .sub{font-size:13px;color:var(--dim);letter-spacing:.15em;margin-bottom:4vh;}
+  #cmpBox{position:relative;height:56vh;min-height:340px;border:1px solid #232d3f;
+    overflow:hidden;user-select:none;touch-action:none;cursor:ew-resize;}
+  #cmpBox svg{position:absolute;inset:0;width:100%;height:100%;}
+  #cmpTop{clip-path:inset(0 50% 0 0);}
+  #cmpBar{position:absolute;top:0;bottom:0;left:50%;width:2px;background:var(--ink);z-index:5;}
+  #cmpBar::after{content:"◂ ▸";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    background:var(--ink);color:#0b0f16;font-size:11px;letter-spacing:2px;
+    padding:6px 8px;border-radius:20px;white-space:nowrap;}
+  .cmpLabel{position:absolute;bottom:3vh;font-size:12px;letter-spacing:.25em;color:var(--dim);z-index:4;pointer-events:none;}
+  #cmpL{left:3vw;} #cmpR{right:3vw;color:var(--blue);}
+
+  /* ================= 篇章三：图谱 + 入地 ================= */
+  #graphSec{height:100vh;overflow:hidden;}
+  #graphSec h1{position:absolute;top:5vh;left:5vw;z-index:3;
+    font-size:clamp(20px,2.6vw,32px);letter-spacing:.14em;font-weight:600;}
+  #graphSec .sub{position:absolute;top:calc(5vh + 3.2em);left:5vw;z-index:3;
+    font-size:12px;letter-spacing:.28em;color:var(--dim);}
+  #graph{position:absolute;inset:0;width:100%;height:100%;cursor:grab;}
+  #graph:active{cursor:grabbing;}
+  .node{cursor:pointer;}
+  .node text{fill:var(--ink);font-size:13px;letter-spacing:1px;pointer-events:none;}
+  .edge{stroke:#2c3546;stroke-width:1.5;}
+  #panel{position:absolute;right:5vw;top:50%;transform:translateY(-50%);
+    width:min(360px,84vw);z-index:4;opacity:0;transition:opacity .4s;pointer-events:none;}
+  #panel.on{opacity:1;pointer-events:auto;}
+  #panel .idx{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.35em;color:var(--dim);margin-bottom:1.2vh;}
+  #panel h2{font-size:clamp(18px,2vw,24px);letter-spacing:.1em;margin-bottom:1.8vh;}
+  #panel .body{font-size:13.5px;line-height:2.1;color:#c9cdd6;}
+  #panel .tag{display:inline-block;margin-top:2vh;font-size:11px;letter-spacing:.2em;
+    font-family:ui-monospace,Menlo,monospace;padding:5px 12px;border:1px solid var(--ev);color:var(--ev);}
+  #panel .quote{margin-top:2vh;padding-left:12px;border-left:2px solid #2c3546;
+    color:var(--dim);font-size:12.5px;line-height:2;}
+  #panelClose{position:absolute;top:-8px;right:0;background:none;border:none;color:var(--dim);
+    font-size:18px;cursor:pointer;}
+  #legend3{position:absolute;left:5vw;bottom:5vh;z-index:3;font-size:12px;letter-spacing:.15em;color:var(--dim);line-height:2;}
+  #legend3 i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:10px;vertical-align:middle;}
+
+  #burySec{height:220vh;}
+  #burySticky{position:sticky;top:0;height:100vh;overflow:hidden;}
+  #burySticky svg.wide{width:100%;height:100%;}
+  #buryText{position:absolute;left:50%;top:16%;transform:translateX(-50%);text-align:center;width:90vw;z-index:3;pointer-events:none;}
+  #buryText h2{font-size:clamp(20px,2.8vw,34px);letter-spacing:.14em;line-height:1.8;
+    opacity:0;transition:opacity 1s;white-space:nowrap;}
+  #buryText p{font-size:clamp(12px,1.3vw,14px);color:var(--dim);letter-spacing:.1em;
+    line-height:2.2;margin-top:2vh;opacity:0;transition:opacity 1s;white-space:nowrap;}
+
+  /* ================= 终版 ================= */
+  #finale{padding:16vh 6vw 0;text-align:center;}
+  #finale h2{font-size:clamp(26px,4vw,48px);letter-spacing:.2em;line-height:2;}
+  #finale .pol{margin-top:6vh;font-size:12.5px;line-height:2.6;color:var(--dim);
+    font-family:ui-monospace,Menlo,monospace;}
+  #finale .cta{margin-top:8vh;}
+  #finale .cta a,#finale .cta button{display:inline-block;margin:0 10px 20px;border:1px solid var(--ink);
+    color:var(--ink);text-decoration:none;font-size:14px;letter-spacing:.3em;text-indent:.3em;
+    padding:13px 34px;transition:all .4s;cursor:pointer;background:none;}
+  #finale .cta a:hover,#finale .cta button:hover{background:var(--ink);color:#0b0f16;}
+  #finale .cta .ghost{border-color:#3a4356;color:#3a4356;cursor:not-allowed;}
+  footer{padding:5vh 0 4vh;text-align:center;font-size:11px;letter-spacing:.25em;color:#3a4356;}
+  @media (max-width:640px){
+    .line,#guess1 p,#buryText h2,#buryText p{white-space:normal;}
+    #card2{top:auto;bottom:10vh;transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ 篇章一：抬头看（下注） ============ -->
+<section id="p1">
+  <svg class="wide" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-label="巷道剖面">
+    <defs><linearGradient id="skyA" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b0f16"/><stop offset="1" stop-color="#1b2436"/></linearGradient></defs>
+    <rect width="1200" height="800" fill="url(#skyA)"/>
+    <g id="stars1"></g>
+    <g><rect x="0" y="240" width="300" height="560" fill="#10151f"/><rect x="0" y="240" width="300" height="6" fill="#1d2635"/>
+      <g fill="#f0b429" opacity=".28">
+        <rect x="40" y="300" width="26" height="34"/><rect x="120" y="360" width="26" height="34"/>
+        <rect x="200" y="300" width="26" height="34"/><rect x="60" y="470" width="26" height="34"/>
+        <rect x="170" y="540" width="26" height="34"/></g>
+      <circle cx="270" cy="430" r="18" fill="none" stroke="#2c3546" stroke-width="4"/>
+      <circle cx="270" cy="430" r="9" fill="none" stroke="#2c3546" stroke-width="4"/>
+      <rect x="296" y="132" width="6" height="240" fill="#232d3f"/></g>
+    <g><rect x="1040" y="280" width="160" height="520" fill="#10151f"/><rect x="1040" y="280" width="160" height="6" fill="#1d2635"/>
+      <g fill="#38c2f1" opacity=".22"><rect x="1080" y="340" width="24" height="32"/><rect x="1130" y="430" width="24" height="32"/></g></g>
+    <g><rect x="872" y="150" width="14" height="580" fill="#1a2230"/><rect x="872" y="150" width="4" height="580" fill="#232d3f"/>
+      <rect x="830" y="168" width="98" height="8" fill="#1a2230"/><rect x="830" y="262" width="98" height="8" fill="#1a2230"/>
+      <g fill="#2c3546"><circle cx="838" cy="164" r="4"/><circle cx="866" cy="164" r="4"/><circle cx="894" cy="164" r="4"/><circle cx="920" cy="164" r="4"/>
+        <circle cx="838" cy="258" r="4"/><circle cx="866" cy="258" r="4"/><circle cx="894" cy="258" r="4"/><circle cx="920" cy="258" r="4"/></g></g>
+    <rect x="0" y="720" width="1200" height="80" fill="#0d121b"/>
+    <line x1="0" y1="720" x2="1200" y2="720" stroke="#1d2635" stroke-width="2"/>
+    <g id="ext1"><rect x="600" y="686" width="10" height="26" rx="3" fill="#7a2a2a"/><rect x="602" y="682" width="6" height="5" fill="#3a4356"/></g>
+    <g id="cables1"></g>
+  </svg>
+
+  <div id="year1">1984<small>电线杆时代</small></div>
+  <p class="line" id="l1a">没有人抬头看它。<small>RELIED ON BY ALL · SEEN BY NONE</small></p>
+  <p class="line" id="l2a">但它已经在这里挂了 40 年。<small>一根杆 · 约 12 根线 · 离地约 3 m</small></p>
+
+  <div id="intro1">
+    <h1>头顶的网</h1>
+    <p>THE NET ABOVE US · 武汉 · 民主路社区 · 巷道上空</p>
+    <button id="lookUp">抬 头 看</button>
+    <span class="hint">单页叙事 · 滚动即时间 · 数据为调研估值（实线=有证据 · 虚线=推测）</span>
+  </div>
+
+  <div id="guess1">
+    <p>猜猜看：这根杆上，一共挂着几根线？</p>
+    <div id="track1"><div id="bubble1">8 根</div></div>
+    <input type="range" id="slider1" min="1" max="30" value="8" aria-label="猜测线缆数量">
+    <button id="submit1">提交猜测</button>
+  </div>
+  <div id="skip1">跳过动画 →</div>
+
+  <div id="legend1">
+    <div><i style="border-top:3px solid var(--amber)"></i>电力</div>
+    <div><i style="border-top:2px solid var(--blue)"></i>通信</div>
+    <div><i style="border-top:2px solid #e8e8e8"></i>照明</div>
+    <div><i style="border-top:2px solid var(--red)"></i>监控</div>
+    <div><i style="border-top:2px dashed var(--grey)"></i>私拉 · 废弃（推测）</div>
+  </div>
+
+  <div id="end1">
+    <p id="end1Text"></p>
+    <small>向下滑动 · 看看这 40 年它经历了什么</small>
+    <button id="toP2">下滑：四十年 →</button>
+  </div>
+</section>
+
+<!-- ============ 篇章二：滚动时间线 ============ -->
+<div id="scrollTrack">
+  <section id="stage2">
+    <svg class="wide" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-label="巷道剖面时间线">
+      <defs><linearGradient id="skyB" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#0b0f16"/><stop offset="1" stop-color="#1b2436"/></linearGradient></defs>
+      <rect width="1200" height="800" fill="url(#skyB)"/>
+      <g id="stars2"></g>
+      <g><rect x="0" y="240" width="300" height="560" fill="#10151f"/><rect x="0" y="240" width="300" height="6" fill="#1d2635"/>
+        <g fill="#f0b429" opacity=".28">
+          <rect x="40" y="300" width="26" height="34"/><rect x="120" y="360" width="26" height="34"/>
+          <rect x="200" y="300" width="26" height="34"/><rect x="60" y="470" width="26" height="34"/>
+          <rect x="170" y="540" width="26" height="34"/></g>
+        <circle cx="270" cy="430" r="18" fill="none" stroke="#2c3546" stroke-width="4" opacity=".7"/>
+        <circle cx="270" cy="430" r="9" fill="none" stroke="#2c3546" stroke-width="4" opacity=".7"/>
+        <rect x="296" y="132" width="6" height="240" fill="#232d3f"/></g>
+      <g><rect x="1040" y="280" width="160" height="520" fill="#10151f"/><rect x="1040" y="280" width="160" height="6" fill="#1d2635"/>
+        <g fill="#38c2f1" opacity=".22"><rect x="1080" y="340" width="24" height="32"/><rect x="1130" y="430" width="24" height="32"/></g></g>
+      <g><rect x="872" y="150" width="14" height="580" fill="#1a2230"/><rect x="872" y="150" width="4" height="580" fill="#232d3f"/>
+        <rect x="830" y="168" width="98" height="8" fill="#1a2230"/><rect x="830" y="262" width="98" height="8" fill="#1a2230"/>
+        <g fill="#2c3546"><circle cx="838" cy="164" r="4"/><circle cx="866" cy="164" r="4"/><circle cx="894" cy="164" r="4"/><circle cx="920" cy="164" r="4"/>
+          <circle cx="838" cy="258" r="4"/><circle cx="866" cy="258" r="4"/><circle cx="894" cy="258" r="4"/><circle cx="920" cy="258" r="4"/></g></g>
+      <rect x="0" y="720" width="1200" height="80" fill="#0d121b"/>
+      <line x1="0" y1="720" x2="1200" y2="720" stroke="#1d2635" stroke-width="2"/>
+      <g><rect x="600" y="686" width="10" height="26" rx="3" fill="#7a2a2a"/><rect x="602" y="682" width="6" height="5" fill="#3a4356"/></g>
+      <g id="cables2"></g>
+      <g id="warn2"><text x="880" y="120" text-anchor="middle" fill="#e0b34d" font-size="14" letter-spacing="4" font-family="monospace">超龄服役</text></g>
+    </svg>
+
+    <div id="year2">1984<small>滚动 = 时间</small></div>
+    <div id="dots2"><span></span><span></span><span></span><span></span><span></span></div>
+    <div id="cue2">▼ 继续滚动</div>
+    <div id="card2">
+      <div class="idx" id="c2idx"></div>
+      <h2 id="c2title"></h2>
+      <p class="body" id="c2body"></p>
+      <span class="tag" id="c2tag"></span>
+    </div>
+    <div id="legend2">
+      <div><i style="border-top:3px solid var(--amber)"></i>电力</div>
+      <div><i style="border-top:2px solid var(--blue)"></i>通信</div>
+      <div><i style="border-top:2px solid #e8e8e8"></i>照明</div>
+      <div><i style="border-top:2px solid var(--red)"></i>监控</div>
+      <div><i style="border-top:2px dashed var(--grey)"></i>私拉 · 废弃（推测）</div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ 揭底 + 前后对照 ============ -->
+<section id="reveal">
+  <div class="idx">REVEAL · 揭底</div>
+  <h2>你猜的，和实际挂着的</h2>
+  <div id="numbers">
+    <div class="num" id="guessNum"><small>你的猜测</small><b>—</b></div>
+    <div class="num"><small>实际 · 逐根计数（估算）</small><b>12<em> 根</em></b></div>
+  </div>
+  <p id="verdict"></p>
+
+  <div id="compare">
+    <h3>前后对照</h3>
+    <p class="sub">拖动中间的分隔线 · 左边是 Stage 1 的「快照」，右边是把快照放回 40 年里的样子</p>
+    <div id="cmpBox">
+      <svg id="cmpBottom" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice"></svg>
+      <svg id="cmpTop" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice"></svg>
+      <div id="cmpBar"></div>
+      <span class="cmpLabel" id="cmpL">STAGE 1 · 静态的安全隐患</span>
+      <span class="cmpLabel" id="cmpR">40 年 · 层层加挂的「临时」</span>
+    </div>
+  </div>
+  <p style="margin-top:12vh"><button id="toP3" style="background:none;border:1px solid var(--ink);color:var(--ink);
+    font-size:14px;letter-spacing:.3em;text-indent:.3em;padding:13px 34px;cursor:pointer;">继续：这张网上挂着谁 →</button></p>
+</section>
+
+<!-- ============ 篇章三：权属图谱 ============ -->
+<section id="graphSec">
+  <h1>这张网上，挂着谁</h1>
+  <p class="sub">WHO ELSE HANGS ON THIS NET · 拖动节点 · 点节点看证据</p>
+  <svg id="graph" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid meet"></svg>
+  <div id="panel">
+    <button id="panelClose" title="关闭">×</button>
+    <div class="idx" id="pIdx"></div>
+    <h2 id="pTitle"></h2>
+    <p class="body" id="pBody"></p>
+    <div class="quote" id="pQuote"></div>
+    <span class="tag" id="pTag">证据</span>
+  </div>
+  <div id="legend3">
+    <div><i style="background:var(--amber)"></i>电力</div>
+    <div><i style="background:var(--blue)"></i>通信</div>
+    <div><i style="background:#e8e8e8"></i>照明 / 监控（共杆）</div>
+    <div><i style="background:var(--grey)"></i>对照 · 情感 · 风险</div>
+    <div><i style="background:#2c3546"></i>未来：入地</div>
+  </div>
+</section>
+
+<!-- ============ 入地 ============ -->
+<section id="burySec">
+  <div id="burySticky">
+    <svg class="wide" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-label="线缆入地">
+      <defs>
+        <linearGradient id="skyC" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#0b0f16"/><stop offset="1" stop-color="#1b2436"/></linearGradient>
+        <linearGradient id="soil" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#0d121b"/><stop offset="1" stop-color="#090c12"/></linearGradient>
+      </defs>
+      <rect width="1200" height="800" fill="url(#skyC)"/>
+      <g id="bStars"></g>
+      <rect x="0" y="240" width="300" height="560" fill="#10151f"/><rect x="0" y="240" width="300" height="6" fill="#1d2635"/>
+      <rect x="1040" y="280" width="160" height="520" fill="#10151f"/>
+      <g><rect x="872" y="150" width="14" height="580" fill="#1a2230"/><rect x="830" y="168" width="98" height="8" fill="#1a2230"/><rect x="830" y="262" width="98" height="8" fill="#1a2230"/></g>
+      <rect x="0" y="700" width="1200" height="100" fill="url(#soil)"/>
+      <g id="bCables"></g>
+      <text id="soilLabel" x="600" y="748" text-anchor="middle" fill="#232d3f"
+        font-size="13" letter-spacing="6" font-family="monospace" opacity="0">地 下 · 管 廊</text>
+    </svg>
+    <div id="buryText">
+      <h2 id="bt1">每一根线，都曾是一个当下的答案。</h2>
+      <p id="bp1">2022 · 武汉市人民政府公报：推动空中管线入廊入地，既有架空管线逐步入地。<br>
+         2023 · 老旧小区改造技术导则：超龄、绝缘不良的管线应更换。</p>
+      <h2 id="bt2" style="margin-top:6vh">入地，是这张网第一次被整体改写。</h2>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 终版 ============ -->
+<section id="finale">
+  <h2>下次路过民主路，<br>抬头看看。</h2>
+  <div class="pol">
+    《武汉市老旧小区改造技术导则》（2023）· 架空管线宜入地敷设<br>
+    《武汉市人民政府公报》2022 年第 8 期 · 既有架空管线逐步入地<br>
+    调研 · 计数 · 访谈 · 夜拍 · 均为本人一手采集；推测与证据分级见调研篇
+  </div>
+  <div class="cta">
+    <button id="btnReplay">再抬头看一次</button>
+    <a class="ghost">VIS5027 · 2026.10</a>
+  </div>
+  <footer>头顶的网 · The Net Above Us · 单页叙事原型 v0.2</footer>
+</section>
+
+<div id="tip"></div>
+
+<script>
+/* Deterministic star field keeps the archived scene reproducible. */
+let netSeed=20261014;
+function netRandom(){netSeed|=0;netSeed=netSeed+0x6D2B79F5|0;let t=Math.imul(netSeed^netSeed>>>15,1|netSeed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}
+const NS='http://www.w3.org/2000/svg';
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const ease=t=>1-Math.pow(1-t,3);
+function starsInto(g,n=70){for(let i=0;i<n;i++){const c=document.createElementNS(NS,'circle');
+  c.setAttribute('cx',netRandom()*1200);c.setAttribute('cy',netRandom()*420);
+  c.setAttribute('r',netRandom()*1.2+.3);c.setAttribute('fill','#e8e6e3');
+  c.setAttribute('opacity',(netRandom()*.5+.1).toFixed(2));g.appendChild(c);}}
+
+/* ================= 共享数据 ================= */
+const OWN={'电力':{color:'#f0b429',w:3,dash:null},'通信':{color:'#38c2f1',w:2,dash:null},
+  '照明':{color:'#e8e8e8',w:2,dash:null},'监控':{color:'#ff6b6b',w:1.6,dash:null},
+  '私拉':{color:'#9aa4b2',w:1.6,dash:'7 6'}};
+const DEFAULT_CABLES=[
+  {year:1984,own:'电力',age:'约 40 年',ev:'现场观察'},
+  {year:1987,own:'电力',age:'约 35–40 年',ev:'推测'},
+  {year:1992,own:'通信',age:'约 30–35 年',ev:'推测'},
+  {year:1995,own:'电力',age:'约 30 年',ev:'现场观察'},
+  {year:1998,own:'通信',age:'约 25–30 年',ev:'推测'},
+  {year:2001,own:'照明',age:'约 20–25 年',ev:'夜拍 E-1'},
+  {year:2004,own:'通信',age:'约 20 年',ev:'推测'},
+  {year:2008,own:'监控',age:'约 15–20 年',ev:'夜拍 E-1'},
+  {year:2011,own:'通信',age:'约 12–15 年',ev:'推测'},
+  {year:2015,own:'私拉',age:'约 8–12 年',ev:'推测'},
+  {year:2019,own:'通信',age:'约 5–8 年',ev:'推测'},
+  {year:2023,own:'照明',age:'约 3 年',ev:'夜拍 E-1'}];
+let CABLES=DEFAULT_CABLES;
+try{
+  const shared=JSON.parse(localStorage.getItem('netAboveCables')||'null');
+  if(Array.isArray(shared)&&shared.length===12&&shared.every(d=>Number.isFinite(d.year)&&OWN[d.own]&&d.ev))CABLES=shared;
+}catch(e){}
+/* 几何生成：锚点高度独立分布 → 线与线相互交错；三次贝塞尔 + 弯曲相位 */
+function srnd(i){const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x);}
+CABLES.forEach((d,i)=>{
+  d.y1=135+srnd(i*7+1)*270;      // 左墙锚点 135~405
+  d.y2=145+srnd(i*7+2)*260;      // 杆上锚点 145~405（与 y1 独立 → 交叉）
+  d.sag=25+srnd(i*7+3)*35;       // 垂度 25~60
+  d.wob=(srnd(i*7+4)-.5)*40;     // 弯曲相位 ±20，交叉角度平缓
+  if(d.own==='私拉')d.sag+=20;   // 私拉线略垂
+});
+const cableD=d=>{
+  const mid=590+d.wob;
+  const c1y=Math.max(d.y1,d.y2)+d.sag;
+  const c2y=Math.max(d.y1,d.y2)+d.sag*.7;
+  return `M300 ${d.y1} C ${mid} ${c1y}, ${mid} ${c2y}, 880 ${d.y2}`;
+};
+const tipEl=document.getElementById('tip');
+function bindTip(p,d){
+  p.addEventListener('mousemove',e=>{
+    tipEl.innerHTML=`<b>${d.year}</b> 年 · ${d.own}线 · ${d.age}<br>证据：${d.ev}`;
+    tipEl.style.left=(e.clientX+16)+'px';tipEl.style.top=(e.clientY-10)+'px';tipEl.style.opacity=1;});
+  p.addEventListener('mouseleave',()=>tipEl.style.opacity=0);
+}
+function mkCable(d,events,gray){
+  const o=OWN[d.own];const p=document.createElementNS(NS,'path');
+  p.setAttribute('d',cableD(d));p.setAttribute('fill','none');
+  if(gray){p.setAttribute('stroke','#5b6577');p.setAttribute('stroke-width',2.4);}
+  else{p.setAttribute('stroke',o.color);p.setAttribute('stroke-width',o.w);if(o.dash)p.setAttribute('stroke-dasharray',o.dash);}
+  if(events){p.style.cursor='pointer';bindTip(p,d);}
+  return p;
+}
+
+/* ================= 篇章一 ================= */
+starsInto(document.getElementById('stars1'));
+const cables1=document.getElementById('cables1');
+let guessVal=null,hanging=false,finished=false;
+const HANG_MS=9500,YEAR0=1984,YEAR1=2026;
+
+function hangCableAnim(d){
+  const o=OWN[d.own];const p=mkCable(d,true);
+  cables1.appendChild(p);
+  if(!o.dash){const len=p.getTotalLength();
+    p.style.strokeDasharray=len;p.style.strokeDashoffset=len;
+    p.getBoundingClientRect();p.style.transition='stroke-dashoffset .7s ease';
+    p.style.strokeDashoffset=0;}
+}
+async function hangAll(){
+  hanging=true;
+  year1.style.opacity=1;skip1.style.opacity=1;
+  const t0=performance.now();let next=0;
+  const sorted=[...CABLES].sort((a,b)=>a.year-b.year);
+  while(next<sorted.length){
+    const t=Math.min((performance.now()-t0)/HANG_MS,1);
+    const yr=Math.round(YEAR0+(YEAR1-YEAR0)*ease(t));
+    year1.firstChild.textContent=yr;
+    while(next<sorted.length&&sorted[next].year<=yr){hangCableAnim(sorted[next]);next++;}
+    if(t>=1)break;await sleep(60);
+  }
+  year1.firstChild.textContent=YEAR1;
+  year1.querySelector('small').textContent='超龄服役 · 大多数 20–35 年';
+  await sleep(700);finishP1();
+}
+async function finishP1(){
+  if(finished)return;finished=true;hanging=false;
+  skip1.style.opacity=0;
+  ext1.style.transition='opacity 1.5s';ext1.style.opacity=.85;
+  l1a.style.opacity=1;await sleep(2600);l1a.style.opacity=0;await sleep(900);
+  l2a.style.opacity=1;await sleep(2600);l2a.style.opacity=0;await sleep(900);
+  legend1.style.opacity=1;guess1.style.opacity=1;guess1.classList.add('on');
+  updateBubble1();
+}
+lookUp.addEventListener('click',()=>{
+  intro1.style.opacity=0;setTimeout(()=>intro1.style.display='none',1200);hangAll();});
+skip1.addEventListener('click',()=>{
+  if(!hanging)return;hanging=false;
+  const done=cables1.childElementCount;
+  [...CABLES].sort((a,b)=>a.year-b.year).slice(done).forEach(d=>cables1.appendChild(mkCable(d,false)));
+  year1.firstChild.textContent=YEAR1;
+  year1.querySelector('small').textContent='超龄服役 · 大多数 20–35 年';
+  year1.style.opacity=1;finishP1();});
+/* 滑杆 */
+function updateBubble1(){
+  const v=+slider1.value;bubble1.textContent=v+' 根';
+  bubble1.style.left=`calc(${8+(v-1)/29*84}%)`;}
+slider1.addEventListener('input',updateBubble1);
+[1,8,15,22,30].forEach(v=>{const s=document.createElement('span');s.className='tick1';
+  s.textContent=v;s.style.left=(8+(v-1)/29*84)+'%';track1.appendChild(s);});
+submit1.addEventListener('click',()=>{
+  guessVal=+slider1.value;
+  try{localStorage.setItem('netGuess',guessVal);}catch(e){}
+  guess1.style.opacity=0;guess1.classList.remove('on');
+  end1Text.innerHTML=`你猜了 <b style="color:var(--blue)">${guessVal}</b> 根。`;
+  end1.classList.add('on');end1.style.opacity=1;updateReveal();});
+toP2.addEventListener('click',()=>document.getElementById('scrollTrack').scrollIntoView({behavior:'smooth'}));
+updateBubble1();
+
+/* ================= 篇章二：滚动时间线 ================= */
+starsInto(document.getElementById('stars2'));
+const cables2=document.getElementById('cables2'),trackEl=document.getElementById('scrollTrack');
+const CHAPTERS=[
+ {until:.16,idx:'1980s · 电线杆时代',title:'巷子天空，一度清亮',
+  body:'一根杆只承担电力与电话。线缆随家电增多逐年加挂——每一根线都曾是解决某个当下问题的方案。',
+  tag:'推测 · 待本地核实',cls:'guess'},
+ {until:.38,idx:'1990s–2000s · 电器时代',title:'层层叠加成「网」',
+  body:'空调、网络入户，线缆逐年叠加。笔记里「大多数 20–35 年」与这一段吻合。',
+  tag:'推测 · 部分印证',cls:'guess'},
+ {until:.60,idx:'2000s–2010s · 光纤入户',title:'强弱混杂，外观难分',
+  body:'多家运营商线缆入场，电力线与通信线肉眼难辨。夜里，监控摄像头也与线缆共杆。',
+  tag:'推测 · 待核实',cls:'guess'},
+ {until:.84,idx:'2020s · 现在',title:'超龄服役',
+  body:'5 栋旁巷道：一杆约 12 根、离地约 3 m，断线出现在杆上。设计寿命一般不低于 30 年——这张网正在集体超龄。',
+  tag:'证据 · 现场一手 + 政策文件',cls:'ev'},
+ {until:1.01,idx:'2020s → · 出口',title:'入地',
+  body:'武汉推动既有架空管线逐步入地。方向明确，但这条巷子何时动工，暂无证据。',
+  tag:'证据 · 政策文件（2022 公报 / 2023 导则）',cls:'ev'}];
+let hung2=new Set(),curCh=-1;
+function hangUpTo(yr){
+  CABLES.forEach(d=>{const k=d.year+d.own;
+    if(d.year<=yr&&!hung2.has(k)){hung2.add(k);
+      const p=mkCable(d,true);cables2.appendChild(p);
+      const o=OWN[d.own];
+      if(!o.dash){const len=p.getTotalLength();
+        p.style.strokeDasharray=len;p.style.strokeDashoffset=len;
+        p.getBoundingClientRect();p.style.transition='stroke-dashoffset .8s ease';
+        p.style.strokeDashoffset=0;}}});}
+function onScroll2(){
+  const max=trackEl.offsetHeight-innerHeight;
+  const top=trackEl.getBoundingClientRect().top;
+  const t=Math.min(Math.max(-top/max,0),1);
+  const yr=Math.round(YEAR0+(YEAR1-YEAR0)*t);
+  year2.firstChild.textContent=yr;year2.style.opacity=1;
+  hangUpTo(yr);
+  warn2.setAttribute('opacity',t>.82?1:0);
+  legend2.style.opacity=t>.3?1:0;
+  dots2.style.opacity=1;
+  cue2.style.opacity=t<.9?1:0;
+  let ci=CHAPTERS.findIndex(c=>t<=c.until);if(ci<0)ci=CHAPTERS.length-1;
+  if(ci!==curCh){curCh=ci;const ch=CHAPTERS[ci];
+    card2.style.opacity=0;
+    setTimeout(()=>{c2idx.textContent=ch.idx;c2title.textContent=ch.title;
+      c2body.textContent=ch.body;c2tag.textContent=ch.tag;
+      c2tag.className='tag '+ch.cls;card2.style.opacity=1;},350);
+    document.querySelectorAll('#dots2 span').forEach((d,i)=>d.classList.toggle('on',i===ci));}
+}
+addEventListener('scroll',onScroll2,{passive:true});
+onScroll2();
+
+/* ================= 揭底 ================= */
+function updateReveal(){
+  let g=guessVal;
+  if(g===null){try{g=localStorage.getItem('netGuess');}catch(e){}}
+  const gb=document.querySelector('#guessNum b');
+  if(g===null){
+    document.getElementById('verdict').innerHTML='这一趟你没有下注——回到顶部「再抬头看一次」，猜一个数再下来，对照才完整。';
+  }else{
+    gb.innerHTML=g+'<em> 根</em>';
+    const diff=g-12,abs=Math.abs(diff);let v;
+    if(abs===0)v='猜得一点不差。但多数人第一次抬头，都会少数几根——被看见的，从来只是这张网的一角。';
+    else if(diff<0)v=`你少数了 ${abs} 根。被依赖的，恰恰最少被看见——这正是「日用而不知」。`;
+    else v=`你多数了 ${abs} 根。纠缠在一起的新旧线，比想象更难数清。`;
+    document.getElementById('verdict').innerHTML=v+
+      '<br><span style="color:var(--dim);font-size:13px">「约 12 根」来自现场逐根计数（放大照片，估算）；离地约 3 m。—— Stage 1 笔记</span>';
+  }
+}
+updateReveal();
+addEventListener('scroll',updateReveal,{passive:true});
+
+/* 前后对照滑杆 */
+const cmpBottom=document.getElementById('cmpBottom'),cmpTop=document.getElementById('cmpTop');
+CABLES.forEach(d=>cmpBottom.appendChild(mkCable(d,false)));
+CABLES.slice(0,4).forEach(d=>cmpTop.appendChild(mkCable(d,false,true)));
+const q=document.createElementNS(NS,'text');
+q.setAttribute('x','600');q.setAttribute('y','110');q.setAttribute('text-anchor','middle');
+q.setAttribute('fill','#8a93a3');q.setAttribute('font-size','22');q.setAttribute('letter-spacing','2');
+q.textContent='「下雨天这些电缆架得不是很高，感觉蛮危险的」 —— W 婆婆';
+cmpTop.appendChild(q);
+const box=document.getElementById('cmpBox'),bar=document.getElementById('cmpBar');
+let dragging=false;
+function setCmp(x){const r=box.getBoundingClientRect();
+  const p=Math.min(Math.max((x-r.left)/r.width,.02),.98)*100;
+  cmpTop.style.clipPath=`inset(0 ${100-p}% 0 0)`;bar.style.left=p+'%';}
+box.addEventListener('pointerdown',e=>{dragging=true;setCmp(e.clientX);box.setPointerCapture(e.pointerId);});
+box.addEventListener('pointermove',e=>{if(dragging)setCmp(e.clientX);});
+box.addEventListener('pointerup',()=>dragging=false);
+toP3.addEventListener('click',()=>document.getElementById('graphSec').scrollIntoView({behavior:'smooth'}));
+
+/* ================= 篇章三：图谱 ================= */
+const GNODES=[
+ {id:'pole',label:'电线杆',r:26,color:'#e8e6e3',x:600,y:380,
+  idx:'我的点 · POINT',body:'民主路社区 5 栋旁巷道。一杆约 12 根线缆、离地约 3 m，断线出现在杆上。杆上同时挂着电力、通信、路灯与至少两组摄像头。',
+  quote:'',tag:'证据 · 现场一手'},
+ {id:'meter',label:'电表箱',r:16,color:'#f0b429',x:400,y:240,
+  idx:'网上挂着谁 · 01',body:'成排电表箱亮着灯：线缆的终点在这里入户——空中 → 杆 → 墙面 → 入户的垂直路径被拍全。',
+  quote:'',tag:'证据 · 夜拍 E-3'},
+ {id:'comm',label:'通信运营商',r:16,color:'#38c2f1',x:800,y:230,
+  idx:'网上挂着谁 · 02',body:'多家运营商线缆入场，电力线与通信线外观难分。哪根在用、哪根废弃，需辨标识或问运营商。',
+  quote:'',tag:'待核实 · 权属辨认'},
+ {id:'light',label:'路灯',r:14,color:'#e8e8e8',x:790,y:520,
+  idx:'网上挂着谁 · 03',body:'夜拍发现路灯与线缆共杆。这张网不只做「电」的生意——照明也挂在这张网上。',
+  quote:'',tag:'证据 · 夜拍 E-1'},
+ {id:'cam',label:'监控摄像头',r:14,color:'#ff6b6b',x:430,y:540,
+  idx:'网上挂着谁 · 04',body:'一根杆上同时有电力线、路灯与至少两组摄像头。安全治理也挂在这张网上。',
+  quote:'',tag:'证据 · 夜拍 E-1'},
+ {id:'shelf',label:'快递货架',r:15,color:'#9aa4b2',x:290,y:410,
+  idx:'新旧基建对照',body:'老八栋 2 单元右侧，活跃 6:00–18:00——新基建有上下班，旧线缆无时无刻。同一条巷子里叠着两个时代的基础设施。',
+  quote:'来源：组员 B 的田野笔记',tag:'小组共享'},
+ {id:'plant',label:'楼道盆栽',r:15,color:'#9aa4b2',x:540,y:620,
+  idx:'被照看 vs 被忽视',body:'被居民日日照看（起床后、做饭前）。不是社区不爱抬头，而是情感只投给「生活之物」。线缆缺的不是可见性，是被照料的关系。',
+  quote:'来源：组员 C 的田野笔记',tag:'小组共享'},
+ {id:'ext',label:'巷口灭火器',r:13,color:'#9aa4b2',x:880,y:400,
+  idx:'风险端',body:'挂在居民楼外墙、线缆正下方。有，但少，且不在 W 婆婆的日常路径上——与白天拍摄互证。',
+  quote:'「附近也没什么灭火器。」—— W 婆婆',tag:'证据 · 夜拍 E-4'},
+ {id:'under',label:'地下管廊',r:17,color:'#2c3546',x:620,y:680,
+  idx:'未来 · 出口',body:'武汉推动既有架空管线逐步入地。方向明确，但这条巷子是否列入改造计划、何时实施，暂无证据。',
+  quote:'',tag:'证据 · 政策文件（方向印证）'}];
+const GLINKS=[['pole','meter'],['pole','comm'],['pole','light'],['pole','cam'],
+ ['pole','shelf'],['pole','plant'],['pole','ext'],['pole','under']];
+const graph=document.getElementById('graph');
+const edgesG=document.createElementNS(NS,'g'),nodesG=document.createElementNS(NS,'g');
+graph.appendChild(edgesG);graph.appendChild(nodesG);
+const byId={};GNODES.forEach(n=>byId[n.id]=n);
+const edgeEls=GLINKS.map(([a,b])=>{const l=document.createElementNS(NS,'line');
+  l.setAttribute('class','edge');edgesG.appendChild(l);
+  return {a:byId[a],b:byId[b],el:l};});
+let dragN=null,selected=null;
+const nodeEls=GNODES.map((n,i)=>{
+  const g=document.createElementNS(NS,'g');g.setAttribute('class','node');
+  g.innerHTML=`<circle r="${n.r}" fill="${n.color}" fill-opacity="${n.id==='under'?0.25:0.9}"
+    stroke="#0b0f16" stroke-width="3"></circle>
+    <text y="${n.r+18}" text-anchor="middle">${n.label}</text>`;
+  g.setAttribute('transform',`translate(${n.x},${n.y})`);
+  nodesG.appendChild(g);
+  g.addEventListener('click',e=>{e.stopPropagation();
+    pIdx.textContent=n.idx;pTitle.textContent=n.label;pBody.textContent=n.body;
+    pQuote.textContent=n.quote;pTag.textContent=n.tag;
+    panel.classList.add('on');selected=n.id;});
+  g.addEventListener('pointerdown',e=>{dragN=GNODES[i];g.setPointerCapture(e.pointerId);});
+  return g;});
+function toSVG(e){const pt=graph.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;
+  return pt.matrixTransform(graph.getScreenCTM().inverse());}
+addEventListener('pointermove',e=>{
+  if(!dragN)return;const pt=toSVG(e);dragN.x=pt.x;dragN.y=pt.y;dragN.vx=dragN.vy=0;});
+addEventListener('pointerup',()=>dragN=null);
+function gTick(){
+  GNODES.forEach(n=>{if(n!==dragN){n.x+=n.vx||0;n.y+=n.vy||0;n.vx=(n.vx||0)*.85;n.vy=(n.vy||0)*.85;}});
+  for(let i=0;i<GNODES.length;i++)for(let j=i+1;j<GNODES.length;j++){
+    const a=GNODES[i],b=GNODES[j];
+    let dx=b.x-a.x,dy=b.y-a.y,d2=dx*dx+dy*dy||1,d=Math.sqrt(d2),f=2600/d2;
+    if(a!==dragN){a.vx=(a.vx||0)-dx/d*f;a.vy=(a.vy||0)-dy/d*f;}
+    if(b!==dragN){b.vx=(b.vx||0)+dx/d*f;b.vy=(b.vy||0)+dy/d*f;}}
+  edgeEls.forEach(({a,b})=>{let dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||1;
+    const rest=190,k=(d-rest)*.004*d*.06;
+    if(a!==dragN){a.vx+=dx/d*k;a.vy+=dy/d*k;}
+    if(b!==dragN){b.vx-=dx/d*k;b.vy-=dy/d*k;}});
+  GNODES.forEach(n=>{if(n===dragN)return;
+    n.vx=(n.vx||0)+(600-n.x)*.0012;n.vy=(n.vy||0)+(400-n.y)*.0012;
+    n.x=Math.max(60,Math.min(1140,n.x));n.y=Math.max(60,Math.min(740,n.y));});
+  edgeEls.forEach(({a,b,el})=>{
+    el.setAttribute('x1',a.x);el.setAttribute('y1',a.y);
+    el.setAttribute('x2',b.x);el.setAttribute('y2',b.y);
+    const lit=selected&&(a.id===selected||b.id===selected);
+    el.setAttribute('stroke',lit?'#8a93a3':'#2c3546');
+    el.setAttribute('stroke-dasharray',lit?'':'3 4');});
+  nodeEls.forEach((el,i)=>{const n=GNODES[i];
+    el.setAttribute('transform',`translate(${n.x},${n.y})`);
+    el.querySelector('circle').setAttribute('r',selected===n.id?n.r*1.25:n.r);});
+  requestAnimationFrame(gTick);
+}
+gTick();
+panelClose.addEventListener('click',()=>{panel.classList.remove('on');selected=null;});
+
+/* ================= 入地 ================= */
+starsInto(document.getElementById('bStars'));
+const bCables=document.getElementById('bCables');
+const buryEls=CABLES.map(d=>{const p=mkCable(d,false);bCables.appendChild(p);return p;});
+const burySec=document.getElementById('burySec');
+function buryUpdate(){
+  const r=burySec.getBoundingClientRect();
+  const total=r.height-innerHeight;
+  const t=Math.min(Math.max(-r.top/total,0),1);
+  const n=buryEls.length;
+  buryEls.forEach((p,i)=>{
+    const start=i/n*.7,span=.3/n+.12;
+    const lt=Math.min(Math.max((t-start)/span,0),1);
+    p.style.transform=`translateY(${lt*640}px)`;p.style.opacity=1-lt*.25;});
+  soilLabel.setAttribute('opacity',t>.75?1:0);
+  bt1.style.opacity=t>.08?1:0;bp1.style.opacity=t>.18?1:0;bt2.style.opacity=t>.8?1:0;
+}
+addEventListener('scroll',buryUpdate,{passive:true});
+buryUpdate();
+
+btnReplay.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+</script>
+</body>
+</html>
